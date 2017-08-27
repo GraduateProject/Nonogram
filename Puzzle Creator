@@ -1,6 +1,6 @@
 # Creating a Nonogram solver
 # by Karen Roberts
-# Graduate Poject 24 Aug 2017
+# Graduate Project 24 Aug 2017
 
 
 
@@ -21,29 +21,26 @@ class nonogramsize:
 rsize = int(input("Please enter row size: "))
 csize = int(input("Please enter column size: "))
 
-### Print the output of what the nxm puzzle size is
-print("This is a", nonogramsize(rsize, csize), "Nonogram Solver")
-
-
-
-
 ### Create a list containing possible picture grid entries
 plist = ['*', '-', 'x']
 vlist = [1,0]
 
 # Create blank puzzle and name it
+class blankPuzzGrid():
+    # Print out the blank puzzle grid
+    def __init__ (self, rsize, csize):
+        self.rsize =rsize
+        self.csize = csize
 
-# Print out the blank puzzle grid
-for j in range(0, csize):
-    print()
-    for i in range(0, rsize):
-        print(str(plist[1]), end=" ")
-    i+=1
-j+=1
-print()
-print()
-
-
+    def show(self):
+        for j in range(0, csize):
+            print()
+            for i in range(0, rsize):
+                print(str(plist[1]), end=" ")
+            i+=1
+        j+=1
+        print()
+        print()
 
 
 
@@ -54,9 +51,11 @@ print()
 ## Create empty rlist for row i
 rlist = []
 
-## Create empy rblist for row i
+## Create empty rblist for row i
 rblist = []
 
+## Create empty rwlist for row i
+rwlist = []
 
 for i in range(0, rsize):
 
@@ -68,48 +67,66 @@ for i in range(0, rsize):
 
     # Create empty inner black hint list for row i hint a
     brehintlist = []
-    
+
+    # Create empty inner white hint list for row i hint a
+    wrehintlist = []
+
+
+
     # Create loop that asks rhcount hints for row i
     for a in range(0, rhcount):
-
 
         # Asks for user to enter hint a for row i
         erhint = int(input("Please input hint in this row:  "))
 
-
-
-        #Change hints to binary strings
+        #Change hints to binary strings of Ones
         brehint = [1]*erhint
 
         #Appends newly converted entry to black row entry list brehintlist
         brehintlist.append(brehint)
-        print(brehintlist)
+        #print(brehintlist)
 
         # Appends newly entered hint a entry to rhlist for row i
         rhlist.append(erhint)
-
 
     # Appends newly appened rhlist to rlist
     rlist.append(rhlist)
 
     #Appends newly appended binary converted list brehinlist to brlist
     rblist.append(brehintlist)
-print(rlist)
-print(rblist)
 
 
+## Create loop to find number of zeros (white) in each row and convert to binary
+
+# Create empty erwcount list that tells how many whites must be all rows
+erwcountlist = []
+
+#Create empty erwcount inner list for white count for row i
+for i in range(0, rsize):
+
+    # Calculate white count for row i
+    erwcount = rsize -sum(rlist[i])
+
+    # convert row count to zeros list
+    erwlist = [0] * (erwcount)
+
+    # Append white count for row to list of white count for all rows
+    erwcountlist.append(erwcount)
+
+    # Append newly converted list of zeros (white) for row i to rwlist
+    rwlist.append(erwlist)
 
 
-
-
-
-#### Create column list containing hint lists for each column
+### Create column list containing hint lists for each column
 
 ## Create empty rlist for column j
 clist = []
 
 ## Create empy rblist for column j
 cblist = []
+
+## Create empty rwlist for row i
+cwlist = []
 
 
 for j in range(0, csize):
@@ -122,7 +139,6 @@ for j in range(0, csize):
 
     # Create empty inner black hint list for column j hint b
     bcehintlist = []
-    
     # Create loop that asks chcount hints for column j
     for b in range(0, chcount):
 
@@ -137,7 +153,7 @@ for j in range(0, csize):
 
         #Appends newly converted entry to black column entry list bcehintlist
         bcehintlist.append(bcehint)
-        print(bcehintlist)
+        #print(bcehintlist)
 
         # Appends newly entered hint a entry to chlist for column j
         chlist.append(echint)
@@ -148,10 +164,60 @@ for j in range(0, csize):
 
     #Appends newly appended binary converted list bcehinlist to bclist
     cblist.append(bcehintlist)
-print(clist)
-print(cblist)
 
 
+## Create loop to find number of zeros (white) in each column and convert to binary
+
+# Create empty ecwcount list that tells how many whites must be all columns
+ecwcountlist = []
+
+# Create empty ecwcount inner list for white count for column j
+for j in range(0, csize):
+    # Calculate white count for column j
+    ecwcount = csize - sum(clist[j])
+
+    # convert column count to zeros list
+    ecwlist = [0] * (ecwcount)
+
+    # Append white count for row to list of white count for all columns
+    ecwcountlist.append(ecwcount)
+
+    # Append newly converted list of zeros (white) for column j to cwlist
+    cwlist.append(ecwlist)
+
+
+
+
+### Print Everything that has been entered as well as the blank puzzle grid
+
+## Nonogram size Data
+print("This is a", nonogramsize(rsize, csize), "Nonogram Solver")
+
+## Row Data
+print("Your list of the number of white block required for each row is: ", erwcountlist)
+print("Your list of white blocks for each row is: ", rwlist)
+print("Your list of row hints is: ", rlist)
+print("Your list of black blocks for each row is: ", rblist)
+
+## Column Data
+print("Your list of the number of white block required for each column is: ", ecwcountlist)
+print("Your list of white blocks for each column is: ", cwlist)
+print("Your list of column hints is: ", clist)
+print("Your list of black blocks for each column is: ", cblist)
+
+## Blank Puzzle Grid
+for j in range(0, csize):
+    print()
+    for i in range(0, rsize):
+        print(str(plist[1]), end=" ")
+    i += 1
+    print(str(rlist[j]), end=" ")
+j += 1
+print()
+for j in range (0, csize):
+    print(str(clist[j]), end =" ")
+print()
+print()
 
 ########################## Developer Notes ######################################
 
@@ -180,14 +246,17 @@ print(cblist)
 # clist = [[1,2], [2,1], [5], [1,1], [1,2]]
 # rblist = [[[1],[1,1]], [[1,1], [1]], [1,1,1], [[1], [1], [1]], [[1,1,1], [1]]]
 # cblist = [[[1], [1,1]], [[1,1], [1]], [1,1,1,1,1], [[1], [1]], [[1], [1,1]]]
+# rwlist =
+# cwlist =
+
 # vlist = ['*', '-', 'x']
 
 # Recal Character picture grid project from grad research
-# Character Picture Grid
-# grid =[matrix.......]
+ # Character Picture Grid
+
 #for j in range(0,csize):
-#    print()
-#    for i in range(0,rsize):
-#       print(str(grid[i][j]), end=" ")
-#    i+=1
+    #print()
+   # for i in range(0,rsize):
+  #   print(str(vlist[i][j]), end=" ")
+ #   i+=1
 #j+=1
